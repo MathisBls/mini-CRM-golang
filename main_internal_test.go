@@ -15,5 +15,4 @@ func TestGreet(t *testing.T) {
 	if greeting != expected {
 		t.Errorf("Greeting = %q; want %q", greeting, expected)
 	}
-	//le %q permet d'afficher les guillemets dans le message d'erreur le %x affiche la valeur en hexadécimal
 }

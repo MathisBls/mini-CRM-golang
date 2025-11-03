@@ -1,11 +1,28 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"tp1/internal/handler"
 )
 
 func main() {
+	addFlag := flag.Bool("add", false, "Ajouter un contact via des flags")
+	idFlag := flag.Int("id", 0, "ID du contact")
+	nomFlag := flag.String("nom", "", "Nom du contact")
+	emailFlag := flag.String("email", "", "Email du contact")
+
+	flag.Parse()
+
+	if *addFlag {
+		if *idFlag == 0 || *nomFlag == "" || *emailFlag == "" {
+			fmt.Println("Utilisation : go run cmd/crm/main.go -add -id=1 -nom=\"Kevin\" -email=\"kevin@exemple.com\"")
+			return
+		}
+		handler.AjouterContactViaFlags(*idFlag, *nomFlag, *emailFlag)
+		return
+	}
+
 	afficherMenu()
 }
 
@@ -28,9 +45,9 @@ func afficherMenu() {
 		case "2":
 			handler.ListerContacts()
 		case "3":
-			fmt.Println("Suppression d'un contact...")
+			handler.SupprimerContact()
 		case "4":
-			fmt.Println("Mise à jour d'un contact...")
+			handler.ModifierContact()
 		case "5":
 			fmt.Println("Au revoir!")
 			return

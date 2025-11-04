@@ -6,12 +6,13 @@ import (
 )
 
 func TestAjouterContact(t *testing.T) {
-	Reset()
+	s := New()
+	s.Reset()
 
-	contact := domain.Contact{ID: 1, Nom: "Jean", Email: "jean@test.com"}
-	Ajouter(contact)
+	contact := &domain.Contact{ID: 1, Nom: "Jean", Email: "jean@test.com"}
+	s.Ajouter(contact)
 
-	contacts := Lister()
+	contacts := s.Lister()
 	if len(contacts) != 1 {
 		t.Errorf("len(contacts) = %d; want 1", len(contacts))
 	}
@@ -23,12 +24,13 @@ func TestAjouterContact(t *testing.T) {
 }
 
 func TestListerContacts(t *testing.T) {
-	Reset()
+	s := New()
+	s.Reset()
 
-	Ajouter(domain.Contact{ID: 1, Nom: "Alice", Email: "alice@test.com"})
-	Ajouter(domain.Contact{ID: 2, Nom: "Bob", Email: "bob@test.com"})
+	s.Ajouter(&domain.Contact{ID: 1, Nom: "Alice", Email: "alice@test.com"})
+	s.Ajouter(&domain.Contact{ID: 2, Nom: "Bob", Email: "bob@test.com"})
 
-	contacts := Lister()
+	contacts := s.Lister()
 	if len(contacts) != 2 {
 		t.Errorf("len(contacts) = %d; want 2", len(contacts))
 	}

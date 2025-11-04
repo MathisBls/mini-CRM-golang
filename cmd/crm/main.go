@@ -4,29 +4,16 @@ import (
 	"flag"
 	"fmt"
 	"tp1/internal/handler"
+	"tp1/internal/store"
 )
 
 func main() {
-	addFlag := flag.Bool("add", false, "Ajouter un contact via des flags")
-	idFlag := flag.Int("id", 0, "ID du contact")
-	nomFlag := flag.String("nom", "", "Nom du contact")
-	emailFlag := flag.String("email", "", "Email du contact")
-
-	flag.Parse()
-
-	if *addFlag {
-		if *idFlag == 0 || *nomFlag == "" || *emailFlag == "" {
-			fmt.Println("Utilisation : go run cmd/crm/main.go -add -id=1 -nom=\"Kevin\" -email=\"kevin@exemple.com\"")
-			return
-		}
-		handler.AjouterContactViaFlags(*idFlag, *nomFlag, *emailFlag)
-		return
-	}
-
-	afficherMenu()
+	storer := store.New()
+	h := handler.New(storer)
+	afficherMenu(h)
 }
 
-func afficherMenu() {
+func afficherMenu(h *handler.Handler) {
 	for {
 		fmt.Println("\n=== Mini-CRM ===")
 		fmt.Println("1. Ajouter un contact")
@@ -41,9 +28,9 @@ func afficherMenu() {
 
 		switch choix {
 		case "1":
-			handler.AjouterContact()
+			h.AjouterContact()
 		case "2":
-			handler.ListerContacts()
+			h.ListerContacts()
 		case "3":
 			handler.SupprimerContact()
 		case "4":

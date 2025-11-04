@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"tp1/internal/handler"
 	"tp1/internal/store"
@@ -31,9 +32,9 @@ func afficherMenu(h *handler.Handler) {
 		case "2":
 			h.ListerContacts()
 		case "3":
-			fmt.Println("Suppression d'un contact...")
+			handler.SupprimerContact()
 		case "4":
-			fmt.Println("Mise à jour d'un contact...")
+			handler.ModifierContact()
 		case "5":
 			fmt.Println("Au revoir!")
 			return

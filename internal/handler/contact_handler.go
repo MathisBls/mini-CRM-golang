@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"tp1/internal/domain"
 )
@@ -59,4 +60,60 @@ func (h *Handler) ListerContacts() {
 	for id, contact := range contacts {
 		fmt.Printf("ID: %d | Nom: %s | Email: %s\n", id, contact.Nom, contact.Email)
 	}
+}
+
+func SupprimerContact() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("ID du contact à supprimer : ")
+	idStr, _ := reader.ReadString('\n')
+	idStr = strings.TrimSpace(idStr)
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		fmt.Println("Erreur : l'ID doit être un nombre.")
+		return
+	}
+
+	ok := store.Supprimer(id)
+	if ok {
+		fmt.Println("Contact supprimé avec succès.")
+	} else {
+		fmt.Println("Aucun contact trouvé avec cet ID.")
+	}
+}
+
+func ModifierContact() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("ID du contact à modifier : ")
+	idStr, _ := reader.ReadString('\n')
+	idStr = strings.TrimSpace(idStr)
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		fmt.Println("Erreur : l'ID doit être un nombre.")
+		return
+	}
+
+	fmt.Print("Nouveau nom (laisser vide pour ne pas changer) : ")
+	nom, _ := reader.ReadString('\n')
+	nom = strings.TrimSpace(nom)
+
+	fmt.Print("Nouvel email (laisser vide pour ne pas changer) : ")
+	email, _ := reader.ReadString('\n')
+	email = strings.TrimSpace(email)
+
+	ok := store.Modifier(id, nom, email)
+	if ok {
+		fmt.Println("Contact modifié avec succès.")
+	} else {
+		fmt.Println("Aucun contact trouvé avec cet ID.")
+	}
+}
+
+func AjouterContactViaFlags(id int, nom string, email string) {
+	contact := domain.Contact{
+		ID:    id,
+		Nom:   nom,
+		Email: email,
+	}
+	store.Ajouter(contact)
+	fmt.Printf("Contact ajouté via flags : ID=%d, Nom=%s, Email=%s\n", id, nom, email)
 }

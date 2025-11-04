@@ -6,13 +6,20 @@ import (
 	"os"
 	"strings"
 	"tp1/internal/domain"
-	"tp1/internal/store"
 )
 
-func AjouterContact() {
+type Handler struct {
+	storer domain.Storer
+}
+
+func New(storer domain.Storer) *Handler {
+	return &Handler{storer: storer}
+}
+
+func (h *Handler) AjouterContact() {
 	reader := bufio.NewReader(os.Stdin)
 
-	id := store.ProchainID()
+	id := h.storer.ProchainID()
 
 	fmt.Print("Nom: ")
 	nom, err := reader.ReadString('\n')
@@ -30,18 +37,18 @@ func AjouterContact() {
 	}
 	email = strings.TrimSpace(email)
 
-	contact := domain.Contact{
+	contact := &domain.Contact{
 		ID:    id,
 		Nom:   nom,
 		Email: email,
 	}
 
-	store.Ajouter(contact)
+	h.storer.Ajouter(contact)
 	fmt.Printf("Contact ajouté avec succès! (ID: %d)\n", id)
 }
 
-func ListerContacts() {
-	contacts := store.Lister()
+func (h *Handler) ListerContacts() {
+	contacts := h.storer.Lister()
 
 	if len(contacts) == 0 {
 		fmt.Println("Aucun contact enregistré.")

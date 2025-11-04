@@ -3,13 +3,16 @@ package main
 import (
 	"fmt"
 	"tp1/internal/handler"
+	"tp1/internal/store"
 )
 
 func main() {
-	afficherMenu()
+	storer := store.New()
+	h := handler.New(storer)
+	afficherMenu(h)
 }
 
-func afficherMenu() {
+func afficherMenu(h *handler.Handler) {
 	for {
 		fmt.Println("\n=== Mini-CRM ===")
 		fmt.Println("1. Ajouter un contact")
@@ -24,9 +27,9 @@ func afficherMenu() {
 
 		switch choix {
 		case "1":
-			handler.AjouterContact()
+			h.AjouterContact()
 		case "2":
-			handler.ListerContacts()
+			h.ListerContacts()
 		case "3":
 			fmt.Println("Suppression d'un contact...")
 		case "4":

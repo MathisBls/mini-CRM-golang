@@ -2,24 +2,33 @@ package store
 
 import "tp1/internal/domain"
 
-var contacts map[int]domain.Contact = make(map[int]domain.Contact)
-var prochainID int = 1
-
-func Ajouter(contact domain.Contact) {
-	contacts[contact.ID] = contact
+type Store struct {
+	contacts   map[int]*domain.Contact
+	prochainID int
 }
 
-func Lister() map[int]domain.Contact {
-	return contacts
+func New() *Store {
+	return &Store{
+		contacts:   make(map[int]*domain.Contact),
+		prochainID: 1,
+	}
 }
 
-func ProchainID() int {
-	id := prochainID
-	prochainID++
+func (s *Store) Ajouter(contact *domain.Contact) {
+	s.contacts[contact.ID] = contact
+}
+
+func (s *Store) Lister() map[int]*domain.Contact {
+	return s.contacts
+}
+
+func (s *Store) ProchainID() int {
+	id := s.prochainID
+	s.prochainID++
 	return id
 }
 
-func Reset() {
-	contacts = make(map[int]domain.Contact)
-	prochainID = 1
+func (s *Store) Reset() {
+	s.contacts = make(map[int]*domain.Contact)
+	s.prochainID = 1
 }

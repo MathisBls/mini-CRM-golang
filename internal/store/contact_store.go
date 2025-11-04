@@ -33,17 +33,17 @@ func (s *Store) Reset() {
 	s.prochainID = 1
 }
 
-func Supprimer(id int) bool {
-	_, existe := contacts[id]
+func (s *Store) Supprimer(id int) bool {
+	_, existe := s.contacts[id]
 	if existe {
-		delete(contacts, id)
+		delete(s.contacts, id)
 		return true
 	}
 	return false
 }
 
-func Modifier(id int, nom string, email string) bool {
-	contact, existe := contacts[id]
+func (s *Store) Modifier(id int, nom string, email string) bool {
+	contact, existe := s.contacts[id]
 	if !existe {
 		return false
 	}
@@ -54,7 +54,6 @@ func Modifier(id int, nom string, email string) bool {
 	if email != "" {
 		contact.Email = email
 	}
-	contacts[id] = contact
+	s.contacts[id] = contact
 	return true
 }
-

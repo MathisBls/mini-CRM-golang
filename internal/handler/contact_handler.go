@@ -62,7 +62,7 @@ func (h *Handler) ListerContacts() {
 	}
 }
 
-func SupprimerContact() {
+func (h *Handler) SupprimerContact() {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("ID du contact à supprimer : ")
 	idStr, _ := reader.ReadString('\n')
@@ -73,7 +73,7 @@ func SupprimerContact() {
 		return
 	}
 
-	ok := store.Supprimer(id)
+	ok := h.storer.Supprimer(id)
 	if ok {
 		fmt.Println("Contact supprimé avec succès.")
 	} else {
@@ -81,7 +81,7 @@ func SupprimerContact() {
 	}
 }
 
-func ModifierContact() {
+func (h *Handler) ModifierContact() {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("ID du contact à modifier : ")
 	idStr, _ := reader.ReadString('\n')
@@ -100,20 +100,10 @@ func ModifierContact() {
 	email, _ := reader.ReadString('\n')
 	email = strings.TrimSpace(email)
 
-	ok := store.Modifier(id, nom, email)
+	ok := h.storer.Modifier(id, nom, email)
 	if ok {
 		fmt.Println("Contact modifié avec succès.")
 	} else {
 		fmt.Println("Aucun contact trouvé avec cet ID.")
 	}
-}
-
-func AjouterContactViaFlags(id int, nom string, email string) {
-	contact := domain.Contact{
-		ID:    id,
-		Nom:   nom,
-		Email: email,
-	}
-	store.Ajouter(contact)
-	fmt.Printf("Contact ajouté via flags : ID=%d, Nom=%s, Email=%s\n", id, nom, email)
 }
